@@ -1,0 +1,67 @@
+---
+- name: Vagrant networking; resolve.conf option
+  lineinfile:
+    dest: /etc/resolv.conf
+    state: present
+    line: "options single-request-reopen"
+
+- name: Vagrant networking; sysconfig network option
+  lineinfile:
+    dest: /etc/sysconfig/network
+    state: present
+    line: "RES_OPTIONS=single-request-reopen"
+  notify: restart network
+
+- name: Copy in custom motd file
+  copy:
+    src: "../files/motd.txt"
+    dest: /etc/motd
+    mode: 0644
+
+- name: Set 'menu' alias in global bashrc
+  lineinfile:
+    dest: /etc/bashrc
+    line: "{{ item }}"
+  with_items:
+    - '# The line below aliases the menu command to show the motd.'
+    - "alias menu='cat /etc/motd'"
+
+- name: Set 'runserver' alias in global bashrc
+  lineinfile:
+    dest: /etc/bashrc
+    line: "{{ item }}"
+  with_items:
+    - "# The line below aliases runserver to Django's runserver command"
+    - "alias runserver='python manage.py runserver 0:8000'"
+
+- name: Set git tab completion in global bashrc
+  lineinfile:
+    dest: /etc/bashrc
+    line: "{{ item }}"
+  with_items:
+    - "# git tab completion"
+    - "source /etc/bash_completion.d/git"
+
+- name: If /home/vagrant/projects exist
+  stat: 
+    path: /home/vagrant/projects
+  register: path_exist
+  
+# - name: Create a symlink to the shared host/guest projects folder
+#   file:
+#     src: /vagrant/projects
+#     dest: /home/vagrant/projects
+#     owner: vagrant
+#     group: vagrant
+#     state: link
+#   when: path_exist.stat.exists is defined and path_exist.stat.exists == false
+
+# $id vagrant
+# uid=1000(vagrant) gid=1000(vagrant) 组=1000(vagrant),10(wheel) 
+# so not necessary below
+# - name: Config /etc/sudoers
+#   lineinfile: dest=/etc/sudoers state=present  line='{{item}}' validate='visudo -cf %s'
+#   with_items:
+#          - "vagrant ALL=(ALL) NOPASSWD: ALL"
+         #- "Defaults: {{user}}  !requiretty"
+

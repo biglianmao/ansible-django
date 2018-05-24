@@ -1,0 +1,32 @@
+---
+
+- name: Ensure {{ virtualenv_dir }} directories exist
+  file: dest={{ virtualenv_dir }} state=directory
+  # tasks:
+  #   - name: test
+  #     file: dest={{ virtualenv_dir }} state=directory
+
+
+- name: Virtualenv | export
+  shell: "{{ item }}"    #command cann't execute
+  with_items:
+    - export VIRTUALENV_PYTHON=/usr/bin/python3
+    - source /usr/bin/virtualenvwrapper.sh
+    #- source /etc/bashrc
+  register: rt
+
+- name: command return
+  debug: var=rt
+
+- name: Virtualenv | Ensure virtualenv is created
+  command: virtualenv {{ app_name }} --no-site-packages
+    creates={{ virtualenv_dir }}/bin/activate
+  register: rt
+- name: command return
+  debug: var=rt
+
+- name: install python packages
+  pip: name={{ item }} virtualenv={{ virtualenv_dir }}
+  with_items: 
+    - django
+    - uwsgi

@@ -1,0 +1,11 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: vagrant
+
+  roles:
+    - { role: vagrant_configure, tags: ['setup'] }
+    # - { role: firewalld, tags: ['firewalld'] }
+    - { role: repository_epel, tags: ['yum'] }
+    - { role: repository_ius, tags: ['yum'] }
+    - { role: yum_packages, tags: ['yum'] }

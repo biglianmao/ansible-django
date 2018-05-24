@@ -1,0 +1,57 @@
+---
+- name: Install pip for Python 2.7 from RHEL
+  yum:
+    name: 'python2-pip'
+    state: present
+
+# Pygments for system wide syntax highlighting with 'ccat' command
+- name: Install Pygments for Python 2.7
+  pip:
+    name: Pygments
+
+- name: Set 'ccat' alias in global bashrc
+  lineinfile:
+    dest: /etc/bashrc
+    line: "{{ item.line }}"
+  with_items:
+    - { line: '# The line below allows syntax highlighting for files with the command "ccat".' }
+    - { line: "alias ccat='pygmentize -O style=monokai -f terminal -g'" }
+   
+# Set up virtualenvwrapper to use Python 3.6 by default
+- name: Install virtualenvwrapper for Python 2.7, using Python 3.6 default for virtualenvs
+  pip:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - virtualenv
+    - virtualenvwrapper
+
+- name: Set virtualenvwrapper in global bashrc
+  lineinfile:
+    dest: /etc/bashrc
+    line: "{{ item.line }}"
+  with_items:
+    - { line: '# virtualenvwrapper Setup' }
+    - { line: 'export VIRTUALENV_PYTHON=/usr/bin/python3.6' }
+    - { line: 'source /usr/bin/virtualenvwrapper.sh' }
+
+- name: Virtualenv | export
+  shell: "{{ item }}"    #command cann't execute
+  with_items:
+    - export VIRTUALENV_PYTHON=/usr/bin/python3
+    #- source /usr/bin/virtualenvwrapper.sh
+    #- source /etc/bashrc
+  register: rt
+
+- name: command return
+  debug: var=rt
+# - name: Virtualenv | Ensure virtualenv is created
+#   command: export VIRTUALENV_PYTHON=/usr/bin/python3
+
+# - name: Virtualenv | Ensure virtualenv is created
+#   command: source /usr/bin/virtualenvwrapper.sh
+
+# Set up Cookie Cutter system-wide
+- name: Install Cookie Cutter for Python 2.7
+  pip:
+    name: cookiecutter   
