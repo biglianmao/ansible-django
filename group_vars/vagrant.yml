@@ -9,7 +9,7 @@ app_pass:                   "12345"
 
 # Virtualenv settings
 
-virtualenv_dir:             "/home/vagrant/{{ app_name }}"
+virtualenv_dir:             "/home/vagrant/env"
 
 source_dir:                 "{{ virtualenv_dir }}/src"
 static_dir:                 "{{ virtualenv_dir }}/static/" # trailing slash is necessary
