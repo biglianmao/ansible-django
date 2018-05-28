@@ -21,9 +21,9 @@
            creates=/etc/nginx/sites-available/default
   notify: reload nginx
 
-# - name: Ensure default virtual host is enabled
-#   file: src=/etc/nginx/sites-available/default dest=/etc/nginx/sites-enabled/default state=link
-#   notify: reload nginx
+- name: Ensure default virtual host is enabled
+  file: src=/etc/nginx/sites-available/default dest=/etc/nginx/sites-enabled/default state=link
+  notify: reload nginx
 
 - name: Ensure conf.d directory does not exist
   file: dest=/etc/nginx/conf.d state=absent
