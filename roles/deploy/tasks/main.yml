@@ -2,5 +2,5 @@
   
 - include: setup_virtualenv.yml    
   become: no
-- include: setup_nginx.yml      
-  become: yes
+# - include: setup_nginx.yml      
+#   become: yes
