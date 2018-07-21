@@ -1,0 +1,20 @@
+
+- hosts: web
+  sudo: yes
+  remote_user: root
+
+  roles:
+    - { role: repository_epel, tags: ['yum'] }
+    - { role: repository_ius, tags: ['yum'] }
+    - { role: yum_packages, tags: ['yum'] }
+
+    - { role: nginx, tags: ['nginx'] }
+
+    - { role: python27, tags: ['python'] }
+    - { role: python36, tags: ['python'] }
+
+    - { role: postgresql, tags: ['postgresql']}
+    - { role: postgresql_vagrant, tags: ['postgresql']}
+    
+    - { role: nodejs, tags: ['nodejs', 'npm']}
+    - { role: redis, tags: ['cache', 'redis']}
