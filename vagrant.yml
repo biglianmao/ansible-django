@@ -21,11 +21,12 @@
     - { role: nodejs, tags: ['nodejs', 'npm']}
     - { role: redis, tags: ['cache', 'redis']}
 
+
 # - hosts: vagrant
 #   sudo: no
 #   remote_user: vagrant
 #   roles:
-    - { role: deploy, tags: ['deploy']}
+    # - { role: deploy, tags: ['deploy']}
     # The following line will perform a yum update.
     # This would take a while!
     # - { role: yum_update, tags: ['yum'] }
